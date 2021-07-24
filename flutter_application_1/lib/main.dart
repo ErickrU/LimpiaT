@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_application_1/pages/splash.dart';
 import 'package:flutter_application_1/pages/home.dart';
-import 'package:flutter_application_1/pages/login.dart';
+import 'package:flutter_application_1/pages/logIn.dart';
 import 'package:flutter_application_1/pages/formstreets.dart';
+import 'package:flutter_application_1/pages/reportform.dart';
 import 'package:flutter_application_1/pages/table.dart';
 
 void main() {
@@ -17,14 +18,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: 'LimpiaT',
+      initialRoute: 'home',
       routes: <String, WidgetBuilder>{
-        //'splash' : (BuildContext context) => appSplash()
+        //'splash' : (BuildContext context) => splashPage()
         'home' : (BuildContext context) => appHome(),
-        'login' : (BuildContext context) => MyApp(),
-        'formstreets' : (BuildContext context) => MyApp(),
-        'tables' : (BuildContext context) => tablesPage()    
-
+        'login' : (BuildContext context) => loginPage(),
+        'form' : (BuildContext context) => formPage(),
+        'tables' : (BuildContext context) => tablesPage(),
+        'reports' : (BuildContext context) => reportFormPage(),    
       }
     );
     // This is the theme of your application.

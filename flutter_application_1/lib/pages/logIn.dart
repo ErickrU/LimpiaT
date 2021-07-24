@@ -1,26 +1,38 @@
 import 'package:flutter/material.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
+class loginPage extends StatefulWidget {
+  loginPage({Key? key}) : super(key: key);
+
+  @override
+  _loginPageState createState() => _loginPageState();
+}
+
+class _loginPageState extends State<loginPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Iniciar sesion',
-      
-      home: Scaffold(
-        body: Column(
-          children:[ 
-            Container(
-            width: 200,
-            height: 200,
-            color: Colors.black,
-            child: Image.asset(
-              'assets/inicio.jpg',
-               fit: BoxFit.none,
-               scale: 3,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Iniciar sesion", textAlign: TextAlign.center),
+      ),
+      body: _bodylogin(),
+    );
+  }
+  Widget _bodylogin(){
+    return ListView(
+      scrollDirection: Axis.vertical,
+      children:[
+        Container(
+          width: 200,
+          height: 200,
+          color: Colors.black,
+          child: Image.asset(
+            'assets/inicio.jpg',
+            fit: BoxFit.none,
+            scale: 3,
+          ),
             padding: EdgeInsets.all(20.0),
-            margin: EdgeInsets.all(100.0),
+            margin: EdgeInsets.all(20.0),
             
             
           ),
@@ -29,7 +41,7 @@ class MyApp extends StatelessWidget {
              child: TextField(
                
                decoration: InputDecoration(
-                 contentPadding: EdgeInsets.symmetric(horizontal:100, vertical:15.0),
+                 contentPadding: EdgeInsets.symmetric(horizontal:100, vertical:10),
                  border: InputBorder.none,
                  hintText: 'ingresa correo',),
               ),
@@ -46,31 +58,19 @@ class MyApp extends StatelessWidget {
               ),
               
            ),
-          FlatButton(
-            
-           padding: EdgeInsets.symmetric(horizontal:80, vertical:2.0),
+           FlatButton(
+            padding: EdgeInsets.symmetric(horizontal:80, vertical:2.0),
             onPressed: (){ 
-             child: (() {
-             });
+
             },
-            
             shape: RoundedRectangleBorder(
-              
               borderRadius: BorderRadius.circular(30)
             ),
             color: Colors.black,
-            
             textColor: Colors.white,
             child: Text("Iniciar"),
           ),
-          
-         ],
-         
-         )
-      )
-      
+      ],
     );
-    
   }
 }
-

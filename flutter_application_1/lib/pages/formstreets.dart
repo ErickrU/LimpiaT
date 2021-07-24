@@ -1,42 +1,26 @@
 import 'package:flutter/material.dart';  
-  
-void formstreets() => runApp(MyApp());  
-  
-class MyApp extends StatelessWidget {  
-  @override  
-  Widget build(BuildContext context) {  
-    final appTitle = 'Formulario Colonia/calles';  
-    return MaterialApp(  
-      title: appTitle,  
-      home: Scaffold(  
-        appBar: AppBar(  
-          backgroundColor: Colors.green,
-          
-          title: Text(appTitle),  
-        ),  
-        body: MyCustomForm(),  
-      ),  
-    );  
-  }  
-}  
-// Create a Form widget.  
-class MyCustomForm extends StatefulWidget {  
-  @override  
-  MyCustomFormState createState() {  
-    return MyCustomFormState();  
-  }  
-} 
- 
-// Create a corresponding State class. This class holds data related to the form.  
-class MyCustomFormState extends State<MyCustomForm> {  
-  // Create a global key that uniquely identifies the Form widget  
-  // and allows validation of the form.  
+
+class formPage extends StatefulWidget {
+  formPage({Key? key}) : super(key: key);
+
+  @override
+  _formPageState createState() => _formPageState();
+}
+
+class _formPageState extends State<formPage> {
   final _formKey = GlobalKey<FormState>();  
-  
-  @override  
-  Widget build(BuildContext context) {  
-    // Build a Form widget using the _formKey created above.  
-    return Form(  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Rutas", textAlign: TextAlign.center),
+      ),
+      body: _bodyform(),
+    );
+  }
+  Widget _bodyform(){
+
+  return Form(  
       key: _formKey,  
       child: Column(  
         crossAxisAlignment: CrossAxisAlignment.start,  
@@ -155,6 +139,6 @@ class MyCustomFormState extends State<MyCustomForm> {
           )       
         ],  
       ),  
-    );  
-  }  
-}  
+    );
+  }
+}
