@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+//import 'package:flutter_application_1/pages/splash.dart';
+import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/pages/login.dart';
+import 'package:flutter_application_1/pages/formstreets.dart';
+import 'package:flutter_application_1/pages/table.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      initialRoute: 'LimpiaT',
+      routes: <String, WidgetBuilder>{
+        //'splash' : (BuildContext context) => appSplash()
+        'home' : (BuildContext context) => appHome(),
+        'login' : (BuildContext context) => MyApp(),
+        'formstreets' : (BuildContext context) => MyApp(),
+        'tables' : (BuildContext context) => tablesPage()    
+
+      }
+    );
+    // This is the theme of your application.
+  }
+}

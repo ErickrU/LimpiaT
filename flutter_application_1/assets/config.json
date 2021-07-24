@@ -1,0 +1,22 @@
+{
+  "name": "",
+  "css_prefix_text": "",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "2c95002db8304b1e7cdb2b34f44c2fe3",
+      "css": "arrow_drop_up",
+      "code": 59392,
+      "src": "material"
+    },
+    {
+      "uid": "fee97968abb26da1508d4d4c35869b0f",
+      "css": "streetview",
+      "code": 59393,
+      "src": "material"
+    }
+  ]
+}
