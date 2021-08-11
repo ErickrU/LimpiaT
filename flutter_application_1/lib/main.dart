@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: 'home',
+      initialRoute: 'tables',
       routes: <String, WidgetBuilder>{
         //'splash' : (BuildContext context) => splashPage()
         'home' : (BuildContext context) => appHome(),

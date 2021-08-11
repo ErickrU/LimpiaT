@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class tablesPage extends StatefulWidget {
   tablesPage({Key? key}) : super(key: key);
@@ -8,6 +10,33 @@ class tablesPage extends StatefulWidget {
 }
 
 class _tablesPageState extends State<tablesPage> {
+  List<Map> list = [];
+  bool reading = true;
+
+  void initState(){
+    super.initState();
+    readData();
+  }
+
+  Future<void> readData() async{
+    try{
+      var url = Uri.parse("https://integradora-a8d7e-default-rtdb.firebaseio.com/camiones_rutas.json");
+      final response = await http.get(url);
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      list.clear();
+      data.forEach((key, value) {//sacar las keys y valores de un mapa
+        /*list.add(value['nombre']);
+        list.add(value['email']);*/
+        list.add({"colonias":formato(value['colonias']), "camion":value['camion'], "notas":value['notas'], "calles":formato(value['calles'])});
+      });
+      setState(() {
+        reading = false;
+      });
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,29 +69,42 @@ class _tablesPageState extends State<tablesPage> {
               DataColumn(label: Text('Camión')),
               DataColumn(label: Text('Notas')),
               DataColumn(label: Text('Calles')),
-              DataColumn(label: Text('CaVe')),
+              DataColumn(label: Text('Clave')),
               DataColumn(label: Text('Editar')),
               DataColumn(label: Text('Eliminar'))
             ],
-            rows: [
-              DataRow(cells: [
-                DataCell(Text("Francisco I. Madero")),
-                DataCell(Text("1951")),
-                DataCell(Text("-")),
-                DataCell(Text("20 de Noviembre")),
-                DataCell(Switch(
-                  value: true,
-                  onChanged: (bool state){
-                    print(state);
-                  },
-                )),
-                DataCell(Icon(Icons.mode_edit)),
-                DataCell(Icon(Icons.delete))
-              ])
-            ],
+            rows:
+                list // Loops through dataColumnText, each iteration assigning the value to element
+                    .map(
+                      ((element) => DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text(element["colonias"])), //Extracting from Map element the value
+                              DataCell(Text(element["camion"])),
+                              DataCell(Text(element["notas"])),
+                              DataCell(Text(element["calles"])),
+                              DataCell(Switch(
+                                value: false,
+                                onChanged: (bool state){
+                                  print(state);
+                                },
+                              )),
+                              DataCell(Icon(Icons.mode_edit)),
+                              DataCell(Icon(Icons.delete))
+                            ],
+                          )),
+                    )
+                    .toList(),
           ),
         )
       ],
     );
+  }
+  String formato(var lst){
+    String str = "";
+    for (var i =0; i<= lst.length-1; i++){
+      str += lst[i];
+      str += "\n";
+    }
+    return str;
   }
 }
