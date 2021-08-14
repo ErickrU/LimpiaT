@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "639026326089",
+    "firebase_url": "https://integradora-a8d7e-default-rtdb.firebaseio.com",
+    "project_id": "integradora-a8d7e",
+    "storage_bucket": "integradora-a8d7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639026326089:android:f3320e60e0eda63282ad98",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639026326089-78dlitp0jak96bicodphccabnjqlnsdm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDavYtMgnjipOEhuh4pd5I56JOxAdWxNxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639026326089-78dlitp0jak96bicodphccabnjqlnsdm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

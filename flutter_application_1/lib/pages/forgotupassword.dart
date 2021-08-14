@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:convert';
 
-class loginPage extends StatefulWidget {
-  loginPage({Key? key}) : super(key: key);
+class ForgotPage extends StatefulWidget {
+  ForgotPage({Key? key}) : super(key: key);
 
   @override
-  _loginPageState createState() => _loginPageState();
+  _ForgotPageState createState() => _ForgotPageState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _ForgotPageState extends State<ForgotPage> {
 
   Color Color1 = Colors.green[800]!;
   Color Color2 = Colors.green[600]!;
 
   final _emailcontroller = TextEditingController();
-  final _passwordcontroller = TextEditingController();
 
   late String email;
-  late String password;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _formularioLoginUI(),
+       body: _formularioLoginUI(),
     );
   }
+
   Widget _formularioLoginUI(){
     return SingleChildScrollView(
       child: Container(
@@ -58,24 +56,16 @@ class _loginPageState extends State<loginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ingresar",
+                      "Recuperar contraseña",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 46.0,
+                        fontSize: 30.0,
                         fontWeight: FontWeight.w800
                       ),
                     ),
                     SizedBox(
                       height: 10.0,
                     ),
-                    Text(
-                      "Tulancingo te quiero limpio!",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w300
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -115,56 +105,16 @@ class _loginPageState extends State<loginPage> {
                         ),
                       ),
                       SizedBox(
-                        height: 20.0,
-                      ),
-                      TextField(
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        controller: _passwordcontroller,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFe7edeb),
-                          hintText: "Contraseña",
-                          prefixIcon:Icon(
-                            Icons.lock,
-                            color: Colors.grey[600],
-                          ) 
-                        ),
-                      ),
-                      SizedBox(
-                        height: 50.0,
-                      ),
-                      Column(
-                        children: [
-                          TextButton(
-                            onPressed: (){
-                              Navigator.pushNamed(context, 'forgotPass');
-                            },
-                            child: Text(
-                              'Recuperar contraseña',
-                              style: TextStyle(
-                                color: Colors.blue[800],
-                                decoration: TextDecoration.underline
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
                         height: 50.0,
                       ),
                       Container(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _loginButton,
+                          onPressed: _ForgotButton,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
                             child: Text(
-                              "Iniciar",
+                              "Enviar correo",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16.0
@@ -175,47 +125,35 @@ class _loginPageState extends State<loginPage> {
                       )
                     ],
                   ),
-                  
                 ),
               ),
             ),
           ],
-          
         ),
       ),
     );
   }
-
-  void _loginButton(){
+  void _ForgotButton(){
     email = _emailcontroller.text;
-    password = _passwordcontroller.text;
-    authUser(email, password);
+    sendcode(email);
   }
-
-  void authUser(String email, String password) async {
+  void sendcode(String email) async {
     try{
-      var url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAo06keNrKP2qel3WyoIsWk_iO0L_j4eIc');
+      var url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAo06keNrKP2qel3WyoIsWk_iO0L_j4eIc');
       Map <String, dynamic> map = new Map <String,dynamic>();
+      map["requestType"] ="PASSWORD_RESET";
       map['email']= email;
-      map['password']= password;
       var response = await http.post(url, body: map);
       if (response.statusCode == 200){
-        var url = Uri.parse("https://integradora-a8d7e-default-rtdb.firebaseio.com/Usuarios.json");
-        final response = await http.get(url);
-        final data = json.decode(response.body) as Map<String, dynamic>;
-          data.forEach((key, value) {//sacar las keys y valores de un mapa
-            if(value["email"] == email){
-              String rol = value['rol'];
-              if(rol == "user_comun"){
-                Navigator.popAndPushNamed(context, 'home');
-              }else if(rol == "user_admin"){
-                Navigator.popAndPushNamed(context, 'tables');
-              }
-            }
-          });
+        _emailcontroller.clear();
+        Fluttertoast.showToast(msg: 'E-mail enviado',
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white);
       }
       else{
-        Fluttertoast.showToast(msg: 'Contraseña o  correo erroneo',
+        Fluttertoast.showToast(msg: 'E-mail no encontrado',
                               toastLength: Toast.LENGTH_LONG,
                               gravity: ToastGravity.BOTTOM,
                               backgroundColor: Colors.green,
