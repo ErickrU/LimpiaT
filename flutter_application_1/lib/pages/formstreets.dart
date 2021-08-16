@@ -101,12 +101,12 @@ class _formPageState extends State<formPage> {
                         'Nota: separar los campos por "/"',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.w800
                         ),
                       ),
                       SizedBox(
-                        height: 10.0,
+                        height: 20.0,
                       ),
                       TextFormField(  
                         controller: _coliniaController,
@@ -243,7 +243,7 @@ class _formPageState extends State<formPage> {
   }
   void _postData(String colonia,String calles,String camion,String notas) async{
     try {
-      var url = Uri.parse('https://login-fltter-default-rtdb.firebaseio.com/rutas.json');
+      var url = Uri.parse('https://integradora-a8d7e-default-rtdb.firebaseio.com/camiones_rutas.json');
       var data = {'colonia':strtolsit(colonia) , 'calles': strtolsit(calles), 'camion': camion, 'notas': notas};
       final response = await http.post(url,body: json.encode(data));
       if (response.statusCode == 200) {

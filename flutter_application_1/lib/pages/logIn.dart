@@ -223,7 +223,7 @@ class _loginPageState extends State<loginPage> {
             if(rol == "user_admin"){
               Navigator.popAndPushNamed(context, 'tables');
             }else{
-              Navigator.popAndPushNamed(context, 'home');
+              Navigator.push(context, MaterialPageRoute(builder: (context) => appHome(emailSend)));
             }
           }
         });

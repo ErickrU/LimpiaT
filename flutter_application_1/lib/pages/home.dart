@@ -208,7 +208,7 @@ class _appHomeState extends State<appHome> {
               visible: show,
             ),
             SizedBox(
-              height: 80,
+              height: 30,
             ),
             Visibility(
               child: Column(
@@ -224,12 +224,21 @@ class _appHomeState extends State<appHome> {
                       tooltip: 'Reportes',
                       child: Icon(Icons.notes)),
                   SizedBox(
-                    height: 15.0,
+                    height: 5.0,
                   ),
                   FloatingActionButton(
                       onPressed: () => {_postData()},
                       tooltip: 'Guardar',
                       child: Icon(Icons.save)),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  FloatingActionButton(
+                      onPressed: () {
+                        Navigator.popAndPushNamed(context, 'about');
+                      },
+                      tooltip: 'About Us',
+                      child: Icon(Icons.perm_identity)),
                 ],
               ),
               visible: show,

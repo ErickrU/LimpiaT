@@ -9,6 +9,7 @@ import 'package:flutter_application_1/pages/formstreets.dart';
 import 'package:flutter_application_1/pages/reportform.dart';
 import 'package:flutter_application_1/pages/table.dart';
 import 'package:flutter_application_1/pages/forgotupassword.dart';
+import 'package:flutter_application_1/pages/about.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         'sensor' : (BuildContext context) => SensorPage(),
         'desarrolladores' : (BuildContext context) => DesarrolladoresPage(),
         'registro' : (BuildContext context) => RegistroPage(),
+        'about' : (BuildContext context) => about(),
       }
     );
   }
