@@ -12,6 +12,7 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
+
   Color Color1 = Colors.green[800]!;
   Color Color2 = Colors.green[600]!;
 
@@ -92,10 +93,9 @@ class _loginPageState extends State<loginPage> {
                       topRight: Radius.circular(40)),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  padding: const EdgeInsets.all(10.0),
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
                     children: [
                       TextField(
                         keyboardType: TextInputType.emailAddress,
@@ -132,7 +132,7 @@ class _loginPageState extends State<loginPage> {
                             )),
                       ),
                       SizedBox(
-                        height: 50.0,
+                        height: 20.0,
                       ),
                       Column(
                         children: [
@@ -150,7 +150,7 @@ class _loginPageState extends State<loginPage> {
                         ],
                       ),
                       SizedBox(
-                        height: 50.0,
+                        height: 20.0,
                       ),
                       Container(
                         width: double.infinity,
@@ -165,7 +165,28 @@ class _loginPageState extends State<loginPage> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height:50.0
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: (){
+                            Navigator.pushNamed(context, 'registro');
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              "Registrarse",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -186,25 +207,23 @@ class _loginPageState extends State<loginPage> {
 
   void authUser(String email, String password) async {
     try {
-      var url = Uri.parse(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAo06keNrKP2qel3WyoIsWk_iO0L_j4eIc');
+      var url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAo06keNrKP2qel3WyoIsWk_iO0L_j4eIc');
       Map<String, dynamic> map = new Map<String, dynamic>();
       map['email'] = email;
       map['password'] = password;
       var response = await http.post(url, body: map);
       if (response.statusCode == 200) {
-        var url = Uri.parse(
-            "https://integradora-a8d7e-default-rtdb.firebaseio.com/Usuarios.json");
+        var url = Uri.parse("https://integradora-a8d7e-default-rtdb.firebaseio.com/Usuarios.json");
         final response = await http.get(url);
         final data = json.decode(response.body) as Map<String, dynamic>;
         data.forEach((key, value) {
           //sacar las keys y valores de un mapa
           if (value["email"] == email) {
             String rol = value['rol'];
-            if (rol == "user_comun") {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => appHome(emailSend)));
-            } else if (rol == "user_admin") {
+            if(rol == "user_admin"){
               Navigator.popAndPushNamed(context, 'tables');
+            }else{
+              Navigator.popAndPushNamed(context, 'home');
             }
           }
         });

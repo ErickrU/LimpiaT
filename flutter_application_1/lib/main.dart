@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/desarrolladores_pages.dart';
 import 'package:flutter_application_1/pages/sensor.dart';
 import 'package:flutter_application_1/pages/splash.dart';
 import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/pages/registopage.dart';
 import 'package:flutter_application_1/pages/logIn.dart';
 import 'package:flutter_application_1/pages/formstreets.dart';
 import 'package:flutter_application_1/pages/reportform.dart';
@@ -30,6 +32,8 @@ class MyApp extends StatelessWidget {
         'reports' : (BuildContext context) => reportFormPage(),
         'forgotPass' : (BuildContext context) => ForgotPage(),
         'sensor' : (BuildContext context) => SensorPage(),
+        'desarrolladores' : (BuildContext context) => DesarrolladoresPage(),
+        'registro' : (BuildContext context) => RegistroPage(),
       }
     );
   }
