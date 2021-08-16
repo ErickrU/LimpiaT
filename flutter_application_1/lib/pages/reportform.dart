@@ -1,112 +1,94 @@
 import 'package:flutter/material.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class reportFormPage extends StatefulWidget {
-  reportFormPage({Key? key}) : super(key: key);
-
   @override
   _reportFormPageState createState() => _reportFormPageState();
 }
 
 class _reportFormPageState extends State<reportFormPage> {
+  final _reportController = TextEditingController();
+  late String report;
+
+  @override
+  void dispose() {
+    _reportController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Reportes", textAlign: TextAlign.center),
-      ),
-      body: _bodyreportForm(),
-    );
-  }
-  Widget _bodyreportForm(){
-    return ListView(
-          scrollDirection: Axis.vertical,
+        appBar: AppBar(
+          title: Text('Reportar'),
+        ),
+        body: Column(
           children: [
-            Container(
+            Center(
               child: Text(
-                '\n Por favor registre sus reportes \n',
-                textAlign: TextAlign.center,
+                'Reportar fallo o sugerencia',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 30,
+                ),
               ),
+            ),
+            SizedBox(
+              height: 30.0,
             ),
             Container(
-              child: Text(
-                '\n Seleccione su fecha \n',
-                textAlign: TextAlign.center,
+              child: TextField(
+                controller: _reportController,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Ingresa tu comentario'),
               ),
             ),
-            Container(
-              child: ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {},
-                children: [
-                  new ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          title: Text('Fecha'),
-                        );
-                      },
-                      body: ListTile(
-                        title: Text('24-07-2021'),
-                        subtitle: Text('Viernes'),
-                      ),
-                      isExpanded: true)
-                ],
-              ),
+            SizedBox(
+              height: 20.0,
             ),
-            Container(
-              child: Text(
-                '\n Seleccione su colonia \n',
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-              child: ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {},
-                children: [
-                  new ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          title: Text('Colonia'),
-                        );
-                      },
-                      body: ListTile(
-                        title: Text('Centro'),
-                        subtitle: Text('Calle principal 21 de marzo'),
-                      ),
-                      isExpanded: true)
-                ],
-              ),
-            ),
-            Container(
-              child: Text(
-                '\n Seleccione su tipo de problema \n',
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-              child: ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {},
-                children: [
-                  new ExpansionPanel(
-                      headerBuilder: (BuildContext context, bool isExpanded) {
-                        return ListTile(
-                          title: Text('Problema'),
-                        );
-                      },
-                      body: ListTile(
-                        title: Text('No se presento el camion'),
-                        subtitle: Text('El servicio de recoleccion no se presento'),
-                      ),
-                      isExpanded: true)
-                ],
-              ),
-            ),
-            Container(
-              child: Text(
-                '\n Agregue una descripcion \n',
-                textAlign: TextAlign.center,
-              ),
-            ),
+            ElevatedButton(onPressed: _repData, child: Text('Enviar'))
           ],
-        );
+        ));
+  }
+
+  void _alert() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('¡Enviado!'),
+            content: Text('Gracias por tu comentario'),
+          );
+        });
+  }
+
+  void _repData() {
+    setState(() {
+      report = _reportController.text;
+
+      _postData(
+        report,
+      );
+    });
+  }
+
+  void _postData(String report) async {
+    try {
+      var url = Uri.parse(
+          "https://integradora-a8d7e-default-rtdb.firebaseio.com/reportes.json");
+
+      var data = {
+        'reporte': report,
+      };
+      final response = await http.post(url, body: json.encode(data));
+      if (response.statusCode == 200) {
+        _alert();
+      }       
+        
+    } catch (error) {
+      print(error.toString());
+    }
   }
 }

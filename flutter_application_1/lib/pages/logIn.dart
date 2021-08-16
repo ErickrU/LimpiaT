@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/home.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
@@ -11,7 +12,6 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
-
   Color Color1 = Colors.green[800]!;
   Color Color2 = Colors.green[600]!;
 
@@ -21,13 +21,16 @@ class _loginPageState extends State<loginPage> {
   late String email;
   late String password;
 
+  var emailSend;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _formularioLoginUI(),
     );
   }
-  Widget _formularioLoginUI(){
+
+  Widget _formularioLoginUI() {
     return SingleChildScrollView(
       child: Container(
         constraints: BoxConstraints(
@@ -35,7 +38,8 @@ class _loginPageState extends State<loginPage> {
           maxWidth: MediaQuery.of(context).size.width,
         ),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
+          gradient: LinearGradient(
+            colors: [
               Color1,
               Color2,
             ],
@@ -51,8 +55,7 @@ class _loginPageState extends State<loginPage> {
               flex: 2,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 50.0, horizontal: 24.0
-                ),
+                    vertical: 50.0, horizontal: 24.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,10 +63,9 @@ class _loginPageState extends State<loginPage> {
                     Text(
                       "Ingresar",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 46.0,
-                        fontWeight: FontWeight.w800
-                      ),
+                          color: Colors.white,
+                          fontSize: 46.0,
+                          fontWeight: FontWeight.w800),
                     ),
                     SizedBox(
                       height: 10.0,
@@ -71,10 +73,9 @@ class _loginPageState extends State<loginPage> {
                     Text(
                       "Tulancingo te quiero limpio!",
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w300
-                      ),
+                          color: Colors.white,
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w300),
                     )
                   ],
                 ),
@@ -87,9 +88,8 @@ class _loginPageState extends State<loginPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40)
-                  ),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -101,18 +101,16 @@ class _loginPageState extends State<loginPage> {
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailcontroller,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFe7edeb),
-                          hintText: "E-mail",
-                          prefixIcon:Icon(
-                            Icons.email,
-                            color: Colors.grey[600],
-                          ) 
-                        ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: BorderSide.none),
+                            filled: true,
+                            fillColor: Color(0xFFe7edeb),
+                            hintText: "E-mail",
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey[600],
+                            )),
                       ),
                       SizedBox(
                         height: 20.0,
@@ -122,18 +120,16 @@ class _loginPageState extends State<loginPage> {
                         obscureText: true,
                         controller: _passwordcontroller,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none
-                          ),
-                          filled: true,
-                          fillColor: Color(0xFFe7edeb),
-                          hintText: "Contraseña",
-                          prefixIcon:Icon(
-                            Icons.lock,
-                            color: Colors.grey[600],
-                          ) 
-                        ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: BorderSide.none),
+                            filled: true,
+                            fillColor: Color(0xFFe7edeb),
+                            hintText: "Contraseña",
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.grey[600],
+                            )),
                       ),
                       SizedBox(
                         height: 50.0,
@@ -141,15 +137,14 @@ class _loginPageState extends State<loginPage> {
                       Column(
                         children: [
                           TextButton(
-                            onPressed: (){
+                            onPressed: () {
                               Navigator.pushNamed(context, 'forgotPass');
                             },
                             child: Text(
                               'Recuperar contraseña',
                               style: TextStyle(
-                                color: Colors.blue[800],
-                                decoration: TextDecoration.underline
-                              ),
+                                  color: Colors.blue[800],
+                                  decoration: TextDecoration.underline),
                             ),
                           )
                         ],
@@ -166,62 +161,62 @@ class _loginPageState extends State<loginPage> {
                             child: Text(
                               "Iniciar",
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0
-                              ),
+                                  color: Colors.white, fontSize: 16.0),
                             ),
                           ),
                         ),
                       )
                     ],
                   ),
-                  
                 ),
               ),
             ),
           ],
-          
         ),
       ),
     );
   }
 
-  void _loginButton(){
+  void _loginButton() {
     email = _emailcontroller.text;
+    emailSend = _emailcontroller.text;
     password = _passwordcontroller.text;
     authUser(email, password);
   }
 
   void authUser(String email, String password) async {
-    try{
-      var url = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAo06keNrKP2qel3WyoIsWk_iO0L_j4eIc');
-      Map <String, dynamic> map = new Map <String,dynamic>();
-      map['email']= email;
-      map['password']= password;
+    try {
+      var url = Uri.parse(
+          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAo06keNrKP2qel3WyoIsWk_iO0L_j4eIc');
+      Map<String, dynamic> map = new Map<String, dynamic>();
+      map['email'] = email;
+      map['password'] = password;
       var response = await http.post(url, body: map);
-      if (response.statusCode == 200){
-        var url = Uri.parse("https://integradora-a8d7e-default-rtdb.firebaseio.com/Usuarios.json");
+      if (response.statusCode == 200) {
+        var url = Uri.parse(
+            "https://integradora-a8d7e-default-rtdb.firebaseio.com/Usuarios.json");
         final response = await http.get(url);
         final data = json.decode(response.body) as Map<String, dynamic>;
-          data.forEach((key, value) {//sacar las keys y valores de un mapa
-            if(value["email"] == email){
-              String rol = value['rol'];
-              if(rol == "user_comun"){
-                Navigator.popAndPushNamed(context, 'home');
-              }else if(rol == "user_admin"){
-                Navigator.popAndPushNamed(context, 'tables');
-              }
+        data.forEach((key, value) {
+          //sacar las keys y valores de un mapa
+          if (value["email"] == email) {
+            String rol = value['rol'];
+            if (rol == "user_comun") {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => appHome(emailSend)));
+            } else if (rol == "user_admin") {
+              Navigator.popAndPushNamed(context, 'tables');
             }
-          });
+          }
+        });
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Contraseña o  correo erroneo',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white);
       }
-      else{
-        Fluttertoast.showToast(msg: 'Contraseña o  correo erroneo',
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.green,
-                              textColor: Colors.white);
-      }
-    }catch(error){
+    } catch (error) {
       print(error.toString());
     }
   }

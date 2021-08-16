@@ -1,122 +1,240 @@
-//import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 
 class appHome extends StatefulWidget {
+  final String emailSend;
+  appHome(this.emailSend, {Key? key}) : super(key: key);
+
   @override
   _appHomeState createState() => _appHomeState();
 }
 
-
 class _appHomeState extends State<appHome> {
-  bool isSwitched = false;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Rutas')),
-      body: Column(
-        children: [
-          Container(
-            child: Text(
-              '\nPor favor registre su reporte\n',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(
-            child: ExpansionPanelList(
-              expansionCallback: (int index, bool isExpanded) {},
-              children: [
-                new ExpansionPanel(
-                    headerBuilder: (BuildContext context, bool isExpanded) {
-                      return ListTile(
-                        title: Text('Reportes '),
-                      );
-                    },
-                    body: ListTile(
-                      title: Text('Sin servico de recoleccion'),
-                      subtitle: Text('No se presento el camion'),
-                    ),
-                    isExpanded: true)
-              ],
-            ),
-          ),
-          Container(
-            child: Text('\n'),
-          ),
-          Container(
-            child: Text(
-              'Fecha\n',
-              textAlign: TextAlign.center,
-            ),
-          
-          ),
-          Container(
-            child: Text(
-              'Aqui aparecera la ruta de su camion ..............................',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(
-            child: Text(
-              '\nActivar notificaiones\n',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(
-            child: Switch(
-              value: isSwitched,
-              onChanged: (value) {
-                setState(() {
-                  newMethod(value);
-                  print(isSwitched);
-                });
-              },
-              activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
-            ),
-          ),
-          Container(
-            child: ButtonBar(
-              children: <Widget>[
-                // ignore: deprecated_member_use
-                FlatButton(
-                  child: Text('Guardar'),
-                  color: Colors.green,
-                  onPressed: (){
-                  },
-                )
-              ],
-            ),
-          ),
-           Container(
-            child: ButtonBar(
-              children: <Widget>[
-                // ignore: deprecated_member_use
-                FlatButton(
-                  child: Text('Reportar'),
-                  color: Colors.green,
-                  onPressed: (){
-                  },
-                )
-              ],
-            ),
-          ),
-           Container(
-            child: ButtonBar(
-              children: <Widget>[
-                // ignore: deprecated_member_use
-                FlatButton(
-                  child: Text('Admin'),
-                  color: Colors.green,
-                  onPressed: (){
-                  },
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    readData();
   }
 
-  bool newMethod(bool value) => isSwitched = value;
+  List<Map<String, dynamic>> list = [];
+
+  bool show = false;
+
+  var printCol;
+  var printCamion;
+  var printCalle;
+  var printNotas;
+
+  var printemail;
+
+  List<Map<String, dynamic>> alldata = [];
+
+  int colPicker = 0;
+
+  bool reading = true;
+
+  Future<void> readData() async {
+    try {
+      var url = Uri.parse(
+          "https://integradora-a8d7e-default-rtdb.firebaseio.com/camiones_rutas.json");
+      var response = await http.get(url);
+      var data = json.decode(response.body) as Map<String, dynamic>;
+      alldata.clear();
+      list.clear();
+      data.forEach((key, value) {
+        alldata.add({
+          "colonias": value['colonias'],
+          "camion": value['camion'],
+          "calles": value['calles'],
+          'notas': value['notas']
+        });
+        list.add({"colonias": value['colonias']});
+      });
+      setState(() {
+        reading = false;
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void _postData() async {
+    try {
+      var url = Uri.parse(
+          "https://integradora-a8d7e-default-rtdb.firebaseio.com/Usuarios/user_2.json");
+
+      Map data = {'camion': printCamion, "email": printemail, "rol": "user_comun"};
+      
+      final response = await http.put(url, body: json.encode(data));
+
+      if (response.statusCode == 200) {
+
+      } else {
+
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    printemail = widget.emailSend;
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Limpia-T',
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      ),
+      body: ListView(
+          scrollDirection: Axis.vertical,
+          padding: EdgeInsets.all(20),
+          children: [
+            Text(
+              'Hola bienvenido a Limpia-T',
+              style: TextStyle(
+                height: 1,
+                fontSize: 24,
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '\n\nPorfavor seleccione su colonia o la mas cercana',
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 15,
+              ),
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.home),
+                filled: false,
+                fillColor: Colors.white,
+                errorStyle: TextStyle(color: Colors.yellow),
+              ),
+              value: null,
+              items: list.map((map) {
+                return DropdownMenuItem<String>(
+                    child: Text(map["colonias"][0]), value: map["colonias"][0]);
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  Text('');
+                  value = value;
+                  for (int i = 0; i < list.length; i++) {
+                    if (list[colPicker]['colonias'][0] == value) {
+                      printCol = alldata[colPicker]['colonias'];
+                      printCamion = alldata[colPicker]['camion'];
+                      printCalle = alldata[colPicker]['calles'];
+                      printNotas = alldata[colPicker]['notas'];
+                      colPicker = 0;
+                      show = true;
+                    } else {
+                      colPicker += 1;
+                    }
+                  }
+                });
+              },
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Visibility(
+              child: Text(
+                'Colonias: ${printCol.toString().replaceAll('[', '').replaceAll(']', '')}',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              visible: show,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Visibility(
+              child: Text(
+                'Camion recolector: ${printCamion.toString().replaceAll('[', '').replaceAll(']', '')}',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              visible: show,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Visibility(
+              child: Text(
+                'Calles: ${printCalle.toString().replaceAll('[', '').replaceAll(']', '')}',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              visible: show,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Visibility(
+              child: Text(
+                'Notas: ${printNotas.toString().replaceAll('[', '').replaceAll(']', '')}',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              visible: show,
+            ),
+            SizedBox(
+              height: 80,
+            ),
+            Visibility(
+              child: Text(
+                'El primer boton de lado derecho es para realizar un reporte queja o sugerencia, el segundo boton es para guardar la colonia que selecciono y que sea notificado',
+                style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 15,
+                ),
+              ),
+              visible: show,
+            ),
+            SizedBox(
+              height: 80,
+            ),
+            Visibility(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerRight,
+                  ),
+                  FloatingActionButton(
+                      onPressed: () =>
+                          {Navigator.pushNamed(context, 'reports')},
+                      tooltip: 'Reportes',
+                      child: Icon(Icons.notes)),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  FloatingActionButton(
+                      onPressed: () => {_postData()},
+                      tooltip: 'Guardar',
+                      child: Icon(Icons.save)),
+                ],
+              ),
+              visible: show,
+            ),
+          ]),
+    );
+  }
 }

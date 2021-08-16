@@ -19,10 +19,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: 'sensor',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (context) => SplashPage(duration: 3),
-        'home' : (BuildContext context) => appHome(),
+        'home' : (BuildContext context) => appHome(''),
         'login' : (BuildContext context) => loginPage(),
         'form' : (BuildContext context) => formPage(),
         'tables' : (BuildContext context) => tablesPage(),
