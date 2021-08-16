@@ -10,36 +10,30 @@ class tablesPage extends StatefulWidget {
 }
 
 class _tablesPageState extends State<tablesPage> {
+  bool selected = false;
   List<Map> list = [];
   bool reading = true;
 
-  void initState() {
+  void initState(){
     super.initState();
     readData();
   }
 
-  Future<void> readData() async {
-    try {
-      var url = Uri.parse(
-          "https://integradora-a8d7e-default-rtdb.firebaseio.com/camiones_rutas.json");
+  Future<void> readData() async{
+    try{
+      var url = Uri.parse("https://integradora-a8d7e-default-rtdb.firebaseio.com/camiones_rutas.json");
       final response = await http.get(url);
       final data = json.decode(response.body) as Map<String, dynamic>;
       list.clear();
-      data.forEach((key, value) {
-        //sacar las keys y valores de un mapa
+      data.forEach((key, value) {//sacar las keys y valores de un mapa
         /*list.add(value['nombre']);
         list.add(value['email']);*/
-        list.add({
-          "colonias": formato(value['colonias']),
-          "camion": value['camion'],
-          "notas": value['notas'],
-          "calles": formato(value['calles'])
-        });
+        list.add({"colonias":formato(value['colonias']), "camion":value['camion'], "notas":value['notas'], "calles":formato(value['calles'])});
       });
       setState(() {
         reading = false;
       });
-    } catch (e) {
+    }catch(e){
       print(e.toString());
     }
   }
@@ -54,21 +48,19 @@ class _tablesPageState extends State<tablesPage> {
       floatingActionButton: _agregar(),
     );
   }
-
-  Widget _agregar() {
+  Widget _agregar(){
     return FloatingActionButton.extended(
-      onPressed: () {
-        Navigator.pushNamed(context, 'form');
+      onPressed: (){
+        
       },
       label: Text("agregar"),
-      icon: Icon(Icons.add),
+      icon : Icon(Icons.add),
     );
   }
-
-  Widget _bodyapp() {
+  Widget _bodyapp(){
     return ListView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal:10),
       children: [
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
@@ -79,7 +71,6 @@ class _tablesPageState extends State<tablesPage> {
               DataColumn(label: Text('Notas')),
               DataColumn(label: Text('Calles')),
               DataColumn(label: Text('Clave')),
-              DataColumn(label: Text('Editar')),
               DataColumn(label: Text('Eliminar'))
             ],
             rows:
@@ -87,19 +78,18 @@ class _tablesPageState extends State<tablesPage> {
                     .map(
                       ((element) => DataRow(
                             cells: <DataCell>[
-                              DataCell(Text(element[
-                                  "colonias"])), //Extracting from Map element the value
+                              DataCell(Text(element["colonias"])), //Extracting from Map element the value
                               DataCell(Text(element["camion"])),
                               DataCell(Text(element["notas"])),
                               DataCell(Text(element["calles"])),
-                              DataCell(Switch(
-                                value: false,
-                                onChanged: (bool state) {
-                                  print(state);
-                                },
+                              DataCell(IconButton(
+                                onPressed: (){
+                                  Navigator.pushNamed(context, 'sensor');
+                                }, 
+                                icon: Icon(Icons.lightbulb),
+                                color: (Colors.green),
                               )),
-                              DataCell(Icon(Icons.mode_edit)),
-                              DataCell(Icon(Icons.delete))
+                              DataCell(Icon(Icons.delete,color: (Colors.green)))
                             ],
                           )),
                     )
@@ -109,10 +99,9 @@ class _tablesPageState extends State<tablesPage> {
       ],
     );
   }
-
-  String formato(var lst) {
+  String formato(var lst){
     String str = "";
-    for (var i = 0; i <= lst.length - 1; i++) {
+    for (var i =0; i<= lst.length-1; i++){
       str += lst[i];
       str += "\n";
     }
