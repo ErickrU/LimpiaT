@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class tablesPage extends StatefulWidget {
@@ -51,7 +52,7 @@ class _tablesPageState extends State<tablesPage> {
   Widget _agregar(){
     return FloatingActionButton.extended(
       onPressed: (){
-        
+        Navigator.pushNamed(context, 'form');
       },
       label: Text("agregar"),
       icon : Icon(Icons.add),
@@ -89,7 +90,17 @@ class _tablesPageState extends State<tablesPage> {
                                 icon: Icon(Icons.lightbulb),
                                 color: (Colors.green),
                               )),
-                              DataCell(Icon(Icons.delete,color: (Colors.green)))
+                              DataCell(IconButton(
+                                onPressed: (){
+                                  Fluttertoast.showToast(
+                                    msg: 'Se elimino correctamente',
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white);
+                                },
+                                icon: Icon(Icons.delete)
+                                ,color: (Colors.green)))
                             ],
                           )),
                     )
